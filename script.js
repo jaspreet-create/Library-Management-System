@@ -1,0 +1,355 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Library Management System</title>
+
+    <link rel="stylesheet" href="./.vscode-shared/style.css">
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div class="brand-mark">L</div>
+
+        <div>
+            <h1>Library Management System</h1>
+            <p>Manage books, issues, returns, and availability</p>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- Dashboard Statistics -->
+        <section class="stats-grid">
+
+            <article class="stat-card">
+                <span class="stat-label">Total Titles</span>
+                <strong id="totalTitles">0</strong>
+                <span class="stat-note">Different books in catalogue</span>
+            </article>
+
+            <article class="stat-card">
+                <span class="stat-label">Total Copies</span>
+                <strong id="totalCopies">0</strong>
+                <span class="stat-note">All copies owned</span>
+            </article>
+
+            <article class="stat-card">
+                <span class="stat-label">Available Copies</span>
+                <strong id="availableCopies">0</strong>
+                <span class="stat-note">Ready to issue</span>
+            </article>
+
+            <article class="stat-card">
+                <span class="stat-label">Books Issued</span>
+                <strong id="issuedCopies">0</strong>
+                <span class="stat-note">Currently with students</span>
+            </article>
+
+        </section>
+
+        <!-- Book Catalogue -->
+        <section class="panel">
+
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">CATALOGUE</p>
+                    <h2>Book Collection</h2>
+                </div>
+
+                <button
+                    class="button button-primary"
+                    id="showAddForm"
+                    type="button">
+                    + Add a Book
+                </button>
+            </div>
+
+            <!-- Add and Edit Book Form -->
+            <form id="bookForm" class="form-grid hidden">
+
+                <input type="hidden" id="editBookId">
+
+                <label>
+                    Book ID
+                    <input
+                        type="text"
+                        id="bookId"
+                        placeholder="e.g. BK101"
+                        required>
+                </label>
+
+                <label>
+                    Book Title
+                    <input
+                        type="text"
+                        id="bookTitle"
+                        placeholder="Enter book title"
+                        required>
+                </label>
+
+                <label>
+                    Author Name
+                    <input
+                        type="text"
+                        id="bookAuthor"
+                        placeholder="Enter author name"
+                        required>
+                </label>
+
+                <label>
+                    Total Quantity
+                    <input
+                        type="number"
+                        id="bookQuantity"
+                        min="1"
+                        step="1"
+                        value="1"
+                        required>
+                </label>
+
+                <div class="form-actions">
+
+                    <button
+                        class="button button-primary"
+                        type="submit"
+                        id="saveBookButton">
+                        Save Book
+                    </button>
+
+                    <button
+                        class="button button-quiet"
+                        type="button"
+                        id="cancelBookForm">
+                        Cancel
+                    </button>
+
+                </div>
+
+            </form>
+
+            <!-- Search Books -->
+            <div class="search-row">
+
+                <div class="search-box">
+                    <span aria-hidden="true">⌕</span>
+
+                    <input
+                        type="search"
+                        id="searchInput"
+                        placeholder="Search by book ID, title, or author...">
+                </div>
+
+                <span id="bookCount" class="muted"></span>
+
+            </div>
+
+            <!-- Books Table -->
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Book ID</th>
+                            <th>Book Title</th>
+                            <th>Author</th>
+                            <th>Total</th>
+                            <th>Available</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="booksTableBody"></tbody>
+
+                </table>
+
+                <div id="emptyBooks" class="empty-state hidden">
+                    <div class="empty-icon">▤</div>
+                    <strong>No Books Found</strong>
+                    <p>Add a book or try a different search.</p>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Issue and Return Sections -->
+        <section class="two-column">
+
+            <!-- Issue Book -->
+            <section class="panel">
+
+                <div class="section-heading">
+
+                    <div>
+                        <p class="eyebrow">CIRCULATION</p>
+                        <h2>Issue a Book</h2>
+                    </div>
+
+                    <span class="heading-icon">↗</span>
+
+                </div>
+
+                <form id="issueForm" class="stack-form">
+
+                    <label>
+                        Select Available Book
+
+                        <select id="issueBookId" required>
+                            <option value="">Choose a book</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Student Name
+
+                        <input
+                            type="text"
+                            id="studentName"
+                            placeholder="Enter student's full name"
+                            required>
+                    </label>
+
+                    <label>
+                        Issue Date
+
+                        <input
+                            type="date"
+                            id="issueDate"
+                            required>
+                    </label>
+
+                    <button
+                        type="submit"
+                        class="button button-primary full-width">
+                        Issue Book
+                    </button>
+
+                </form>
+
+                <p class="helper-text">
+                    Only books with available copies can be issued.
+                </p>
+
+            </section>
+
+            <!-- Return Book -->
+            <section class="panel">
+
+                <div class="section-heading">
+
+                    <div>
+                        <p class="eyebrow">CIRCULATION</p>
+                        <h2>Return a Book</h2>
+                    </div>
+
+                    <span class="heading-icon">↙</span>
+
+                </div>
+
+                <form id="returnForm" class="stack-form">
+
+                    <label>
+                        Issued Book / Student
+
+                        <select id="returnIssueId" required>
+                            <option value="">Choose an active issue</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Return Date
+
+                        <input
+                            type="date"
+                            id="returnDate"
+                            required>
+                    </label>
+
+                    <button
+                        type="submit"
+                        class="button button-secondary full-width">
+                        Record Return
+                    </button>
+
+                </form>
+
+                <p class="helper-text">
+                    Returning a book increases its available quantity.
+                </p>
+
+            </section>
+
+        </section>
+
+        <!-- Issue Records -->
+        <section class="panel">
+
+            <div class="section-heading">
+
+                <div>
+                    <p class="eyebrow">ACTIVITY</p>
+                    <h2>Issue Records</h2>
+                </div>
+
+                <span id="activeIssueCount" class="count-pill">
+                    0 active
+                </span>
+
+            </div>
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Record ID</th>
+                            <th>Book</th>
+                            <th>Student</th>
+                            <th>Issue Date</th>
+                            <th>Return Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="issuesTableBody"></tbody>
+
+                </table>
+
+                <div id="emptyIssues" class="empty-state hidden">
+                    <div class="empty-icon">▧</div>
+                    <strong>No Issue Records Yet</strong>
+                    <p>Issued books will appear here.</p>
+                </div>
+
+            </div>
+
+        </section>
+
+        <p class="footer-note">
+            Library Management System | HTML, CSS and JavaScript
+        </p>
+
+    </main>
+
+    <!-- Notification Message -->
+    <div
+        id="toast"
+        class="toast"
+        role="status"
+        aria-live="polite">
+    </div>
+
+    <!-- JavaScript Connection -->
+    <script src="./.vscode-shared/script.js"></script>
+
+</body>
+</html>
