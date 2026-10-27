@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Management System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-mark">L</div>
+    <div>
+      <h1>Library Management System</h1>
+      <p>Manage books, issues, returns, and availability</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="stats-grid" aria-label="Library summary">
+      <article class="stat-card"><span class="stat-label">Total titles</span><strong id="totalTitles">0</strong><span class="stat-note">Different books in catalogue</span></article>
+      <article class="stat-card"><span class="stat-label">Total copies</span><strong id="totalCopies">0</strong><span class="stat-note">All copies owned</span></article>
+      <article class="stat-card"><span class="stat-label">Available copies</span><strong id="availableCopies">0</strong><span class="stat-note">Ready to issue</span></article>
+      <article class="stat-card"><span class="stat-label">Books issued</span><strong id="issuedCopies">0</strong><span class="stat-note">Currently with students</span></article>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">CATALOGUE</p><h2>Book collection</h2></div>
+        <button class="button button-primary" id="showAddForm">+ Add a book</button>
+      </div>
+
+      <form id="bookForm" class="form-grid hidden">
+        <input type="hidden" id="editBookId">
+        <label>Book ID<input id="bookId" required placeholder="e.g. BK101"></label>
+        <label>Book title<input id="bookTitle" required placeholder="Enter book title"></label>
+        <label>Author name<input id="bookAuthor" required placeholder="Enter author"></label>
+        <label>Total quantity<input id="bookQuantity" type="number" min="1" step="1" required value="1"></label>
+        <div class="form-actions">
+          <button class="button button-primary" type="submit" id="saveBookButton">Save book</button>
+          <button class="button button-quiet" type="button" id="cancelBookForm">Cancel</button>
+        </div>
+      </form>
+
+      <div class="search-row">
+        <div class="search-box"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Search by book ID, title, or author..."></div>
+        <span id="bookCount" class="muted"></span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Book ID</th><th>Book title</th><th>Author</th><th>Total</th><th>Available</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="booksTableBody"></tbody>
+        </table>
+        <div id="emptyBooks" class="empty-state hidden"><div class="empty-icon">▤</div><strong>No books found</strong><p>Add a book or try a different search.</p></div>
+      </div>
+    </section>
+
+    <section class="two-column">
+      <section class="panel">
+        <div class="section-heading"><div><p class="eyebrow">CIRCULATION</p><h2>Issue a book</h2></div><span class="heading-icon">↗</span></div>
+        <form id="issueForm" class="stack-form">
+          <label>Select available book<select id="issueBookId" required><option value="">Choose a book</option></select></label>
+          <label>Student name<input id="studentName" required placeholder="Enter student's full name"></label>
+          <label>Issue date<input id="issueDate" type="date" required></label>
+          <button class="button button-primary full-width" type="submit">Issue book</button>
+        </form>
+        <p class="helper-text">Only books with available copies can be issued.</p>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading"><div><p class="eyebrow">CIRCULATION</p><h2>Return a book</h2></div><span class="heading-icon">↙</span></div>
+        <form id="returnForm" class="stack-form">
+          <label>Issued book / student<select id="returnIssueId" required><option value="">Choose an active issue</option></select></label>
+          <label>Return date<input id="returnDate" type="date" required></label>
+          <button class="button button-secondary full-width" type="submit">Record return</button>
+        </form>
+        <p class="helper-text">Returning a book increases its available quantity.</p>
+      </section>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading"><div><p class="eyebrow">ACTIVITY</p><h2>Issue records</h2></div><span id="activeIssueCount" class="count-pill">0 active</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Record ID</th><th>Book</th><th>Student</th><th>Issue date</th><th>Return date</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="issuesTableBody"></tbody>
+        </table>
+        <div id="emptyIssues" class="empty-state hidden"><div class="empty-icon">▧</div><strong>No issue records yet</strong><p>Issued books will appear here.</p></div>
+      </div>
+    </section>
+    <p class="footer-note">Demo project · Data is saved in this browser using local storage.</p>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
