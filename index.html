@@ -1,279 +1,301 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Management System</title>
 
-    <title>Library Management System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Link CSS -->
-    <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+<main class="page-shell">
 
-    <header class="topbar">
-        <div class="brand-mark">L</div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">L</div>
+      <div>
+        <h1>Library Management System</h1>
+        <p>Manage books, issues, returns, and availability</p>
+      </div>
+    </div>
+    <div class="header-badge">
+      <span class="status-dot"></span> Library Dashboard
+    </div>
+  </header>
+
+  <!-- Statistics -->
+  <section class="stats-grid">
+    <article class="stat-card">
+      <div class="stat-top">
+        <span>Total Titles</span>
+        <span class="stat-icon purple">▤</span>
+      </div>
+      <strong id="totalTitles">5</strong>
+      <small>Different books in catalogue</small>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-top">
+        <span>Total Copies</span>
+        <span class="stat-icon blue">▣</span>
+      </div>
+      <strong id="totalCopies">48</strong>
+      <small>All copies owned</small>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-top">
+        <span>Available Copies</span>
+        <span class="stat-icon green">✓</span>
+      </div>
+      <strong id="availableCopies">41</strong>
+      <small>Ready to issue</small>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-top">
+        <span>Books Issued</span>
+        <span class="stat-icon orange">↗</span>
+      </div>
+      <strong id="booksIssued">7</strong>
+      <small>Currently with students</small>
+    </article>
+  </section>
+
+  <!-- Books by Category and Recently Added Books -->
+  <section class="insights-grid">
+
+    <article class="panel category-panel">
+      <div class="panel-heading">
         <div>
-            <h1>Library Management System</h1>
-            <p>Manage books, issues, returns, and availability</p>
+          <span class="eyebrow">YOUR COLLECTION</span>
+          <h2>Books by Category</h2>
+          <p>Real-time book distribution sorted by primary library classification.</p>
         </div>
-    </header>
+        <span class="soft-pill" id="genreCount">5 Active Genres</span>
+      </div>
 
-    <main class="container">
+      <div class="chart-wrap">
+        <div class="y-axis" id="yAxis"></div>
+        <div class="chart-area">
+          <div class="grid-lines" id="gridLines"></div>
+          <div class="bars" id="categoryBars"></div>
+        </div>
+      </div>
+    </article>
 
-        <!-- Dashboard Statistics -->
-        <section class="stats-grid">
+    <article class="panel recent-panel">
+      <div class="panel-heading recent-heading">
+        <div>
+          <span class="eyebrow">HANDPICKED FROM THE SHELVES</span>
+          <h2>Recently Added Books</h2>
+        </div>
+        <a href="#catalogue" class="view-all">View All →</a>
+      </div>
 
-            <article class="stat-card">
-                <span class="stat-label">Total Titles</span>
-                <strong id="totalTitles">0</strong>
-                <span class="stat-note">Different books in catalogue</span>
-            </article>
+      <div class="recent-label">
+        <span>BOOK DETAILS</span>
+        <span>CATEGORY</span>
+      </div>
 
-            <article class="stat-card">
-                <span class="stat-label">Total Copies</span>
-                <strong id="totalCopies">0</strong>
-                <span class="stat-note">All copies owned</span>
-            </article>
+      <div class="recent-list" id="recentBooks"></div>
+    </article>
 
-            <article class="stat-card">
-                <span class="stat-label">Available Copies</span>
-                <strong id="availableCopies">0</strong>
-                <span class="stat-note">Ready to issue</span>
-            </article>
+  </section>
 
-            <article class="stat-card">
-                <span class="stat-label">Books Issued</span>
-                <strong id="issuedCopies">0</strong>
-                <span class="stat-note">Currently with students</span>
-            </article>
+  <!-- Book Catalogue -->
+  <section class="panel catalogue-panel" id="catalogue">
 
-        </section>
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">CATALOGUE</span>
+        <h2>Book Collection</h2>
+      </div>
+      <button class="primary-btn" id="showFormBtn">+ Add a Book</button>
+    </div>
 
-        <!-- Book Catalogue -->
-        <section class="panel">
+    <form class="book-form hidden" id="bookForm">
+      <div class="form-grid">
 
-            <div class="section-heading">
-                <div>
-                    <p class="eyebrow">CATALOGUE</p>
-                    <h2>Book Collection</h2>
-                </div>
+        <label>
+          Book ID
+          <input id="bookId" placeholder="e.g. BK101" required>
+        </label>
 
-                <button class="button button-primary" id="showAddForm" type="button">
-                    + Add a Book
-                </button>
-            </div>
+        <label>
+          Book Title
+          <input id="bookTitle" placeholder="Enter book title" required>
+        </label>
 
-            <form id="bookForm" class="form-grid hidden">
+        <label>
+          Author Name
+          <input id="bookAuthor" placeholder="Enter author name" required>
+        </label>
 
-                <input type="hidden" id="editBookId">
+        <label>
+          Category
+          <select id="bookCategory">
+            <option>Literature</option>
+            <option>Fiction</option>
+            <option>Science</option>
+            <option>Philosophy</option>
+            <option>History</option>
+          </select>
+        </label>
 
-                <label>
-                    Book ID
-                    <input type="text" id="bookId" placeholder="e.g. BK101" required>
-                </label>
+        <label>
+          Total Quantity
+          <input id="bookQuantity" type="number" min="1" value="1" required>
+        </label>
 
-                <label>
-                    Book Title
-                    <input type="text" id="bookTitle" placeholder="Enter book title" required>
-                </label>
+      </div>
 
-                <label>
-                    Author Name
-                    <input type="text" id="bookAuthor" placeholder="Enter author name" required>
-                </label>
+      <div class="form-actions">
+        <button class="primary-btn" type="submit">Save Book</button>
+        <button class="secondary-btn" type="button" id="cancelFormBtn">Cancel</button>
+      </div>
+    </form>
 
-                <label>
-                    Total Quantity
-                    <input type="number" id="bookQuantity" min="1" step="1" value="1" required>
-                </label>
+    <div class="search-box">
+      <span>⌕</span>
+      <input id="searchInput" type="search" placeholder="Search by book ID, title, or author...">
+    </div>
 
-                <div class="form-actions">
-                    <button class="button button-primary" type="submit" id="saveBookButton">
-                        Save Book
-                    </button>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Book ID</th>
+            <th>Book Title</th>
+            <th>Author</th>
+            <th>Category</th>
+            <th>Total</th>
+            <th>Available</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="bookTable"></tbody>
+      </table>
+    </div>
 
-                    <button class="button button-quiet" type="button" id="cancelBookForm">
-                        Cancel
-                    </button>
-                </div>
+  </section>
 
-            </form>
+  <!-- Issue and Return Books -->
+  <section class="circulation-grid">
 
-            <!-- Search -->
-            <div class="search-row">
-                <div class="search-box">
-                    <span aria-hidden="true">⌕</span>
-                    <input type="search" id="searchInput" placeholder="Search by book ID, title, or author...">
-                </div>
+    <article class="panel circulation-panel">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">CIRCULATION</span>
+          <h2>Issue a Book</h2>
+        </div>
+        <span class="round-icon issue-icon">↗</span>
+      </div>
 
-                <span id="bookCount" class="muted"></span>
-            </div>
+      <form id="issueForm" class="stack-form">
 
-            <!-- Books Table -->
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Book ID</th>
-                            <th>Book Title</th>
-                            <th>Author</th>
-                            <th>Total</th>
-                            <th>Available</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
+        <label>
+          Select Available Book
+          <select id="issueBook" required></select>
+        </label>
 
-                    <tbody id="booksTableBody"></tbody>
-                </table>
+        <label>
+          Student Name
+          <input id="studentName" placeholder="Enter student's full name" required>
+        </label>
 
-                <div id="emptyBooks" class="empty-state hidden">
-                    <div class="empty-icon">▤</div>
-                    <strong>No Books Found</strong>
-                    <p>Add a book or try a different search.</p>
-                </div>
-            </div>
+        <label>
+          Issue Date
+          <input id="issueDate" type="date" required>
+        </label>
 
-        </section>
+        <button class="primary-btn full-btn" type="submit">
+          Issue Book
+        </button>
 
-        <!-- Issue and Return -->
-        <section class="two-column">
+      </form>
 
-            <!-- Issue Book -->
-            <section class="panel">
+      <p class="helper-text">
+        Only books with available copies can be issued.
+      </p>
+    </article>
 
-                <div class="section-heading">
-                    <div>
-                        <p class="eyebrow">CIRCULATION</p>
-                        <h2>Issue a Book</h2>
-                    </div>
+    <article class="panel circulation-panel">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">CIRCULATION</span>
+          <h2>Return a Book</h2>
+        </div>
+        <span class="round-icon return-icon">↙</span>
+      </div>
 
-                    <span class="heading-icon">↗</span>
-                </div>
+      <form id="returnForm" class="stack-form">
 
-                <form id="issueForm" class="stack-form">
+        <label>
+          Issued Book / Student
+          <select id="returnRecord" required></select>
+        </label>
 
-                    <label>
-                        Select Available Book
-                        <select id="issueBookId" required>
-                            <option value="">Choose a book</option>
-                        </select>
-                    </label>
+        <label>
+          Return Date
+          <input id="returnDate" type="date" required>
+        </label>
 
-                    <label>
-                        Student Name
-                        <input type="text" id="studentName" placeholder="Enter student's full name" required>
-                    </label>
+        <button class="primary-btn full-btn" type="submit">
+          Record Return
+        </button>
 
-                    <label>
-                        Issue Date
-                        <input type="date" id="issueDate" required>
-                    </label>
+      </form>
 
-                    <button type="submit" class="button button-primary full-width">
-                        Issue Book
-                    </button>
+      <p class="helper-text">
+        Returning a book increases its available quantity.
+      </p>
+    </article>
 
-                </form>
+  </section>
 
-                <p class="helper-text">
-                    Only books with available copies can be issued.
-                </p>
+  <!-- Issue Records -->
+  <section class="panel activity-panel">
 
-            </section>
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">ACTIVITY</span>
+        <h2>Issue Records</h2>
+      </div>
+      <span class="soft-pill" id="activeCount">7 active</span>
+    </div>
 
-            <!-- Return Book -->
-            <section class="panel">
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Record ID</th>
+            <th>Book</th>
+            <th>Student</th>
+            <th>Issue Date</th>
+            <th>Return Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="recordsTable"></tbody>
+      </table>
+    </div>
 
-                <div class="section-heading">
-                    <div>
-                        <p class="eyebrow">CIRCULATION</p>
-                        <h2>Return a Book</h2>
-                    </div>
+  </section>
 
-                    <span class="heading-icon">↙</span>
-                </div>
+  <footer>
+    Library Management System <span>·</span> HTML, CSS and JavaScript
+  </footer>
 
-                <form id="returnForm" class="stack-form">
+</main>
 
-                    <label>
-                        Issued Book / Student
-                        <select id="returnIssueId" required>
-                            <option value="">Choose an active issue</option>
-                        </select>
-                    </label>
-
-                    <label>
-                        Return Date
-                        <input type="date" id="returnDate" required>
-                    </label>
-
-                    <button type="submit" class="button button-secondary full-width">
-                        Record Return
-                    </button>
-
-                </form>
-
-                <p class="helper-text">
-                    Returning a book increases its available quantity.
-                </p>
-
-            </section>
-
-        </section>
-
-        <!-- Issue Records -->
-        <section class="panel">
-
-            <div class="section-heading">
-                <div>
-                    <p class="eyebrow">ACTIVITY</p>
-                    <h2>Issue Records</h2>
-                </div>
-
-                <span id="activeIssueCount" class="count-pill">0 active</span>
-            </div>
-
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Record ID</th>
-                            <th>Book</th>
-                            <th>Student</th>
-                            <th>Issue Date</th>
-                            <th>Return Date</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="issuesTableBody"></tbody>
-                </table>
-
-                <div id="emptyIssues" class="empty-state hidden">
-                    <div class="empty-icon">▧</div>
-                    <strong>No Issue Records Yet</strong>
-                    <p>Issued books will appear here.</p>
-                </div>
-            </div>
-
-        </section>
-
-        <p class="footer-note">
-            Library Management System | HTML, CSS and JavaScript
-        </p>
-
-    </main>
-
-    <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
-    <!-- Link JavaScript -->
-    <script src="script.js"></script>
-
+<script src="script.js"></script>
 </body>
 </html>
-```
